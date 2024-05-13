@@ -15,4 +15,8 @@ public interface AccountDao extends JpaRepository<Account, Integer>
 	@Query(value = "UPDATE account SET balance = :balance WHERE account_no = :accountNo", nativeQuery = true)
 	void updateBalance(int accountNo, int balance);
 
+	@Modifying
+	@Query(value = "UPDATE account SET loan_taken = :newLoan WHERE account_no = :accountNo", nativeQuery = true)
+	void updateLoan(int accountNo, int newLoan);
+
 }

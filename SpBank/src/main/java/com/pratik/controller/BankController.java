@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,7 +25,7 @@ public class BankController
 	@PostMapping("create")
 	public String createUser(@RequestBody UserData user) 
 	{
-		return "Account No is : "+bank.createUser(user);
+		return "Your New Account Number is : "+bank.createUser(user);
 		
 	}
 	
@@ -34,10 +35,37 @@ public class BankController
 		return bank.getUserByAccountNo(accountNo);
 	}
 	
-	@PostMapping("deposit")
+	@PutMapping("deposit")
 	public String deposit(@RequestParam(name = "amount") int amount, @RequestParam(name = "accountNo") int accountNo)
 	{
 		bank.deposit(amount, accountNo);
 		return "Amount Successfully Deposited ";
+	}
+	
+	@PutMapping("withdraw")
+	public String withdraw(@RequestParam(name = "amount") int amount, @RequestParam(name = "accountNo") int accountNo, 
+							@RequestParam(name = "password") String password)
+	{
+		return bank.withdraw(amount, accountNo, password);
+	}
+	
+	@GetMapping(value="balance/{account}", produces={"application/json"})
+	public ResponseEntity<Integer> fetchBalance(@PathVariable("account") int accountNo)
+	{
+		return bank.getBalance(accountNo);
+	}
+	
+	@PutMapping("getloan")
+	public String getLoan(@RequestParam(name = "amount") int amount, @RequestParam(name = "accountNo") int accountNo, 
+				@RequestParam(name = "password") String password)
+	{
+		return bank.checkLoan(amount, accountNo, password);
+	}
+	
+	@PutMapping("repayloan")
+	public String repay(@RequestParam(name = "amount") int amount, @RequestParam(name = "accountNo") int accountNo,
+				@RequestParam(name = "password") String password)
+	{
+		return bank.repay(amount, accountNo, password);
 	}
 }
